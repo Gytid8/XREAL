@@ -9,6 +9,9 @@ namespace Unity.XR.XREAL.DrawingViewer
     {
         private const float ToolbarButtonWidth = 72f;
         private const float ToolbarButtonHeight = 56f;
+        private const float CycleLayoutButtonWidth = 86f;
+        private const float CycleLayoutButtonHeight = 64f;
+        private const float CycleLayoutFontSize = 22f;
         private const float MinButtonPixels = 40f;
 
         public static void EnsureDrawingViewerUi(Transform uiCanvasRoot)
@@ -31,9 +34,10 @@ namespace Unity.XR.XREAL.DrawingViewer
             EnsureButton(toolbar, "Btn_RotateLeft", "\u5de6\u8f6c", new Vector2(-150f, -12f));
             EnsureButton(toolbar, "Btn_RotateRight", "\u53f3\u8f6c", new Vector2(-60f, -12f));
             EnsureButton(toolbar, "Btn_ResetView", "\u91cd\u7f6e", new Vector2(30f, -12f));
-            EnsureButton(toolbar, "Btn_CycleLayout", "\u6392\u7248", new Vector2(120f, -12f));
+            EnsureButton(toolbar, "Btn_CycleLayout", "\u6392\u7248\n\u5355\u9875", new Vector2(120f, -12f), CycleLayoutButtonWidth, CycleLayoutButtonHeight);
             EnsureButton(toolbar, "Btn_ReturnToMenu", "\u8fd4\u56de\u4e3b\u83dc\u5355", new Vector2(700f, -12f), 180f, ToolbarButtonHeight);
 
+            ApplyCycleLayoutButtonStyle(toolbar.Find("Btn_CycleLayout"));
             RepairBrokenButtonSizes(toolbar);
             AppUiTheme.ApplyToolbar(toolbar);
             BringButtonsToFront(toolbar);
@@ -82,6 +86,8 @@ namespace Unity.XR.XREAL.DrawingViewer
 
                 if (button.name == "Btn_ReturnToMenu")
                     rect.sizeDelta = new Vector2(180f, ToolbarButtonHeight);
+                else if (button.name == "Btn_CycleLayout")
+                    rect.sizeDelta = new Vector2(CycleLayoutButtonWidth, CycleLayoutButtonHeight);
                 else if (button.name == "Btn_Previous" || button.name == "Btn_Next")
                     rect.sizeDelta = new Vector2(56f, 56f);
                 else
@@ -104,6 +110,8 @@ namespace Unity.XR.XREAL.DrawingViewer
             if (existing != null)
             {
                 EnsureButtonLabel(existing, label);
+                if (name == "Btn_CycleLayout")
+                    ApplyCycleLayoutButtonStyle(existing);
                 return;
             }
 
@@ -134,8 +142,37 @@ namespace Unity.XR.XREAL.DrawingViewer
             tmp.alignment = TextAlignmentOptions.Center;
             tmp.raycastTarget = false;
 
+            if (name == "Btn_CycleLayout")
+                ApplyCycleLayoutButtonLabelStyle(tmp);
+
             DrawingViewerFontProvider.Apply(tmp);
             AppUiTheme.StyleButton(button, name == "Btn_OpenFile" ? AppUiTheme.ButtonStyle.Primary : AppUiTheme.ButtonStyle.Secondary);
+        }
+
+        public static void ApplyCycleLayoutButtonLabelStyle(TextMeshProUGUI text)
+        {
+            if (text == null)
+                return;
+
+            text.alignment = TextAlignmentOptions.Center;
+            text.enableWordWrapping = false;
+            text.overflowMode = TextOverflowModes.Overflow;
+            text.fontSize = CycleLayoutFontSize;
+            text.lineSpacing = -6f;
+        }
+
+        private static void ApplyCycleLayoutButtonStyle(Transform buttonTransform)
+        {
+            if (buttonTransform == null)
+                return;
+
+            var rect = buttonTransform.GetComponent<RectTransform>();
+            if (rect != null)
+                rect.sizeDelta = new Vector2(CycleLayoutButtonWidth, CycleLayoutButtonHeight);
+
+            var text = buttonTransform.GetComponentInChildren<TextMeshProUGUI>(true);
+            if (text != null)
+                ApplyCycleLayoutButtonLabelStyle(text);
         }
 
         private static void EnsureButtonLabel(Transform buttonTransform, string label)
@@ -146,6 +183,9 @@ namespace Unity.XR.XREAL.DrawingViewer
 
             text.text = label;
             DrawingViewerFontProvider.Apply(text);
+
+            if (buttonTransform.name == "Btn_CycleLayout")
+                ApplyCycleLayoutButtonLabelStyle(text);
         }
     }
 }

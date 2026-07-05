@@ -247,8 +247,9 @@ namespace Unity.XR.XREAL.DrawingViewer
             if (text == null)
                 return;
 
-            text.text = "\u6392\u7248\u00b7" + modeName;
+            text.text = "\u6392\u7248\n" + modeName;
             DrawingViewerFontProvider.Apply(text);
+            DrawingViewerUiFactory.ApplyCycleLayoutButtonLabelStyle(text);
         }
 
         public void OnOpenFile()
