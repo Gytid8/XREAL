@@ -1,0 +1,13 @@
+{
+  "name": "Unity.XR.XREAL.SwitchRecognition.Runtime",
+  "references": [
+    "Unity.XR.XREAL.App.Core.Runtime",
+    "Unity.XR.XREAL.DrawingViewer.Runtime",
+    "Unity.XR.XREAL",
+    "Unity.XR.ARFoundation",
+    "Unity.TextMeshPro",
+    "UnityEngine.UI"
+  ],
+  "includePlatforms": ["Android", "Editor"],
+  "rootNamespace": "Unity.XR.XREAL.SwitchRecognition"
+}

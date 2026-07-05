@@ -1,0 +1,20 @@
+{
+  "name": "Unity.XR.XREAL.DrawingViewer.Editor",
+  "references": [
+    "Unity.XR.XREAL.DrawingViewer.Runtime",
+    "Unity.XR.XREAL.App.Core.Runtime",
+    "Unity.XR.XREAL.SwitchRecognition.Runtime",
+    "Unity.XR.XREAL",
+    "Unity.XR.CoreUtils",
+    "Unity.XR.ARFoundation",
+    "Unity.XR.ARSubsystems",
+    "Unity.XR.Interaction.Toolkit",
+    "Unity.XR.Management",
+    "Unity.XR.Management.Editor",
+    "Unity.TextMeshPro",
+    "Unity.InputSystem",
+    "UnityEngine.UI"
+  ],
+  "includePlatforms": ["Editor"],
+  "rootNamespace": "Unity.XR.XREAL.DrawingViewer.Editor"
+}

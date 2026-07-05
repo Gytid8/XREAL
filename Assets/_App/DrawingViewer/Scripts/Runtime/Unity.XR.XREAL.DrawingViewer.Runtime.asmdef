@@ -1,0 +1,16 @@
+{
+  "name": "Unity.XR.XREAL.DrawingViewer.Runtime",
+  "references": [
+    "Unity.XR.XREAL.App.Core.Runtime",
+    "Unity.XR.XREAL",
+    "Unity.XR.CoreUtils",
+    "Unity.XR.ARFoundation",
+    "Unity.XR.ARSubsystems",
+    "Unity.XR.Hands",
+    "Unity.XR.Interaction.Toolkit",
+    "Unity.TextMeshPro",
+    "Unity.InputSystem"
+  ],
+  "includePlatforms": ["Android", "Editor"],
+  "rootNamespace": "Unity.XR.XREAL.DrawingViewer"
+}

@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b827a3740dbb0d24280341c5ba1112fb, type: 3}
+  m_Name: SwitchClassDefinition
+  m_EditorClassIdentifier: 
+  _classes:
+  - classId: 0
+    displayName: "\u65AD\u8DEF\u5668"
+    labelColor: {r: 0.2, g: 0.75, b: 1, a: 1}
+  - classId: 1
+    displayName: "\u9694\u79BB\u5F00\u5173"
+    labelColor: {r: 0.45, g: 0.95, b: 0.55, a: 1}
+  - classId: 2
+    displayName: "\u8D1F\u8377\u5F00\u5173"
+    labelColor: {r: 1, g: 0.78, b: 0.35, a: 1}

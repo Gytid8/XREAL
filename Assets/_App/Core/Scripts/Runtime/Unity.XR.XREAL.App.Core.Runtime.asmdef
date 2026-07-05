@@ -1,0 +1,10 @@
+{
+  "name": "Unity.XR.XREAL.App.Core.Runtime",
+  "references": [
+    "Unity.XR.XREAL",
+    "Unity.TextMeshPro",
+    "UnityEngine.UI"
+  ],
+  "includePlatforms": ["Android", "Editor"],
+  "rootNamespace": "Unity.XR.XREAL.App.Core"
+}

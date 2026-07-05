@@ -1,0 +1,46 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bfda3958f03da1d48b2d44808e4032bd, type: 3}
+  m_Name: DrawingViewerSettings
+  m_EditorClassIdentifier: 
+  DefaultTrackingType: 3
+  DefaultInputSource: 3
+  PanelDefaultDistance: 2
+  PanelVerticalOffset: -0.2
+  PanelDefaultWidth: 1.2
+  DefaultAspectRatio: 1.414
+  MaxLoadedPages: 10
+  TextureMaxSize: 2048
+  PinchZoomSpeed: 0.005
+  TouchpadScrollSpeed: 0.01
+  DragSpeed: 1
+  TwoHandRotationSpeed: 1
+  LaserRayDistance: 10
+  HandJitterSmoothing: 0.3
+  PanelRotationStepDegrees: 15
+  TouchpadRotationSpeed: 1.5
+  TouchpadDeadzone: 0.15
+  PanelSmoothDamping: 8
+  MinZoomScale: 0.2
+  MaxZoomScale: 5
+  DefaultLayout: 1
+  GridSpacing: 0.3
+  StackZOffset: 0.005
+  UICanvasDistance: 0.8
+  UICanvasWidth: 1.6
+  UICanvasVerticalOffset: -0.02
+  UIBottomBarLiftPixels: 40
+  MinButtonSize: 0.04
+  EnableNetworkUpload: 1
+  UploadHttpPort: 8080
+  DiscoveryUdpPort: 52345
+  DeviceDisplayName: XREAL Drawing Viewer
