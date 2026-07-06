@@ -14,6 +14,8 @@ namespace Unity.XR.XREAL.DrawingViewer
 
         [Header("Scroll Sensitivity")]
         [SerializeField] private float _zoomScrollSpeed = 0.5f;
+        [SerializeField] private float _fixedZoomStep = 0.1f;
+        [SerializeField] private float _zoomScrollThreshold = 0.35f;
         [SerializeField] private float _pageScrollSpeed = 0.5f;
         [SerializeField] private float _touchpadRotationSpeed = 1.5f;
 
@@ -36,6 +38,11 @@ namespace Unity.XR.XREAL.DrawingViewer
         /// Accumulated horizontal scroll for page navigation threshold.
         /// </summary>
         private float _accumulatedHorizontalScroll;
+
+        /// <summary>
+        /// Accumulated vertical scroll for fixed-step zoom threshold.
+        /// </summary>
+        private float _accumulatedVerticalScroll;
 
         private const float PageScrollThreshold = 0.5f;
 
@@ -101,10 +108,17 @@ namespace Unity.XR.XREAL.DrawingViewer
                     return;
                 }
 
-                // Vertical scroll = zoom
+                // Vertical scroll = fixed-step zoom
                 if (Mathf.Abs(touchDelta.y) > 0)
                 {
-                    handler.HandleZoom(-touchDelta.y * _zoomScrollSpeed);
+                    _accumulatedVerticalScroll += touchDelta.y * _zoomScrollSpeed;
+
+                    if (Mathf.Abs(_accumulatedVerticalScroll) >= _zoomScrollThreshold)
+                    {
+                        int direction = _accumulatedVerticalScroll > 0 ? -1 : 1;
+                        handler.HandleZoomStep(direction * _fixedZoomStep);
+                        _accumulatedVerticalScroll = 0;
+                    }
                 }
 
                 // Horizontal scroll = page navigation
@@ -122,8 +136,9 @@ namespace Unity.XR.XREAL.DrawingViewer
             }
             else if (!_xrealInput.IsTouching() && _wasTouching)
             {
-                // Touch ended - reset scroll accumulator
+                // Touch ended - reset scroll accumulators
                 _accumulatedHorizontalScroll = 0;
+                _accumulatedVerticalScroll = 0;
             }
 
             // Direct touch position for drag
