@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 using Unity.XR.XREAL.App.Core;
 
@@ -23,7 +24,8 @@ namespace Unity.XR.XREAL.DrawingViewer
         private float _lastZoomClickTime;
         private float _lastRotateClickTime;
         private float _lastLayoutClickTime;
-        private const float ZoomClickCooldown = 0.25f;
+        private int _lastZoomFrame = -1;
+        private const float ZoomClickCooldown = 0.35f;
         private const float RotateClickCooldown = 0.15f;
         private const float LayoutClickCooldown = 0.35f;
 
@@ -34,6 +36,7 @@ namespace Unity.XR.XREAL.DrawingViewer
 
         private void Start()
         {
+            Debug.Log($"[ToolbarDebug] DrawingToolbarUI instances = {FindObjectsOfType<DrawingToolbarUI>(true).Length}, object = {name}");
             RefreshButtonBindings();
             SyncLayoutButtonLabel();
         }
@@ -73,57 +76,30 @@ namespace Unity.XR.XREAL.DrawingViewer
 
         private void WireButtonListeners()
         {
-            if (_zoomInButton != null)
-            {
-                _zoomInButton.onClick.RemoveListener(OnZoomIn);
-                _zoomInButton.onClick.AddListener(OnZoomIn);
-            }
+            BindButton(_zoomInButton, OnZoomIn);
+            BindButton(_zoomOutButton, OnZoomOut);
+            BindButton(_rotateLeftButton, OnRotateLeft);
+            BindButton(_rotateRightButton, OnRotateRight);
+            BindButton(_resetViewButton, OnResetView);
+            BindButton(_cycleLayoutButton, OnCycleLayout);
+            BindButton(_openFileButton, OnOpenFile);
+            BindButton(_returnToMenuButton, OnReturnToMenu);
 
-            if (_zoomOutButton != null)
-            {
-                _zoomOutButton.onClick.RemoveListener(OnZoomOut);
-                _zoomOutButton.onClick.AddListener(OnZoomOut);
-            }
+            Debug.Log($"[ToolbarDebug] zoomIn={_zoomInButton?.name}, zoomOut={_zoomOutButton?.name}");
+        }
 
-            if (_rotateLeftButton != null)
-            {
-                _rotateLeftButton.onClick.RemoveListener(OnRotateLeft);
-                _rotateLeftButton.onClick.AddListener(OnRotateLeft);
-            }
+        private static void BindButton(Button button, UnityAction action)
+        {
+            if (button == null || action == null)
+                return;
 
-            if (_rotateRightButton != null)
-            {
-                _rotateRightButton.onClick.RemoveListener(OnRotateRight);
-                _rotateRightButton.onClick.AddListener(OnRotateRight);
-            }
-
-            if (_resetViewButton != null)
-            {
-                _resetViewButton.onClick.RemoveListener(OnResetView);
-                _resetViewButton.onClick.AddListener(OnResetView);
-            }
-
-            if (_cycleLayoutButton != null)
-            {
-                _cycleLayoutButton.onClick.RemoveListener(OnCycleLayout);
-                _cycleLayoutButton.onClick.AddListener(OnCycleLayout);
-            }
-
-            if (_openFileButton != null)
-            {
-                _openFileButton.onClick.RemoveListener(OnOpenFile);
-                _openFileButton.onClick.AddListener(OnOpenFile);
-            }
-
-            if (_returnToMenuButton != null)
-            {
-                _returnToMenuButton.onClick.RemoveListener(OnReturnToMenu);
-                _returnToMenuButton.onClick.AddListener(OnReturnToMenu);
-            }
+            button.onClick.RemoveListener(action);
+            button.onClick.AddListener(action);
         }
 
         public void OnZoomIn()
         {
+            Debug.Log($"[ToolbarDebug] OnZoomIn frame={Time.frameCount}, time={Time.unscaledTime}, object={name}");
             if (!CanZoomNow())
                 return;
 
@@ -134,6 +110,7 @@ namespace Unity.XR.XREAL.DrawingViewer
 
         public void OnZoomOut()
         {
+            Debug.Log($"[ToolbarDebug] OnZoomOut frame={Time.frameCount}, time={Time.unscaledTime}, object={name}");
             if (!CanZoomNow())
                 return;
 
@@ -144,9 +121,13 @@ namespace Unity.XR.XREAL.DrawingViewer
 
         private bool CanZoomNow()
         {
+            if (_lastZoomFrame == Time.frameCount)
+                return false;
+
             if (Time.unscaledTime - _lastZoomClickTime < ZoomClickCooldown)
                 return false;
 
+            _lastZoomFrame = Time.frameCount;
             _lastZoomClickTime = Time.unscaledTime;
             return true;
         }

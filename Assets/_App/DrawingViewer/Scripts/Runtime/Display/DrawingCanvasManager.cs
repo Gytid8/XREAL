@@ -19,6 +19,8 @@ namespace Unity.XR.XREAL.DrawingViewer
         private bool _isLoadingNeighbors;
         private DrawingPanelController.ViewState _preservedViewState = DrawingPanelController.ViewState.Invalid;
         private bool _hasPreservedViewState;
+        private float _preservedZoomScale = 1f;
+        private bool _hasPreservedZoomScale;
         private Coroutine _repositionCoroutine;
 
         private Dictionary<int, DrawingPanelController> _panelsByPage = new Dictionary<int, DrawingPanelController>();
@@ -224,7 +226,27 @@ namespace Unity.XR.XREAL.DrawingViewer
             if (controller == null || !_hasPreservedViewState)
                 return;
 
+            Debug.Log($"[ViewStateDebug] Restore to page={controller.PageDisplay.PageIndex}, preservedScale={_preservedZoomScale}, beforeScale={controller.CurrentScale}, beforeVisual={controller.GetVisualScaleMultiplier()}");
+
             controller.ApplyViewState(_preservedViewState);
+
+            if (_hasPreservedZoomScale)
+            {
+                controller.SetZoom(_preservedZoomScale);
+                controller.SnapToTargets();
+            }
+
+            Debug.Log($"[ViewStateDebug] After restore page={controller.PageDisplay.PageIndex}, afterScale={controller.CurrentScale}, afterVisual={controller.GetVisualScaleMultiplier()}");
+            StartCoroutine(LogViewStateNextFrame(controller));
+        }
+
+        private System.Collections.IEnumerator LogViewStateNextFrame(DrawingPanelController controller)
+        {
+            yield return null;
+            if (controller == null)
+                yield break;
+
+            Debug.Log($"[ViewStateDebug] Next frame page={controller.PageDisplay.PageIndex}, afterScale={controller.CurrentScale}, afterVisual={controller.GetVisualScaleMultiplier()}");
         }
 
         public void RepositionActivePanel()
@@ -240,6 +262,8 @@ namespace Unity.XR.XREAL.DrawingViewer
                 ActivePanel.ResetToDefaultView(cam);
                 RefreshLayout();
                 _hasPreservedViewState = false;
+                _hasPreservedZoomScale = false;
+                _preservedZoomScale = 1f;
             }
         }
 
@@ -330,6 +354,8 @@ namespace Unity.XR.XREAL.DrawingViewer
             _panelPlacedInWorld = false;
             _hasPreservedViewState = false;
             _preservedViewState = DrawingPanelController.ViewState.Invalid;
+            _hasPreservedZoomScale = false;
+            _preservedZoomScale = 1f;
         }
 
         private void CaptureActiveViewState()
@@ -339,6 +365,10 @@ namespace Unity.XR.XREAL.DrawingViewer
 
             _preservedViewState = ActivePanel.CaptureViewState();
             _hasPreservedViewState = _preservedViewState.IsValid;
+            _preservedZoomScale = ActivePanel.CurrentScale;
+            _hasPreservedZoomScale = true;
+
+            Debug.Log($"[ViewStateDebug] Capture page={ActivePanel.PageDisplay.PageIndex}, currentScale={ActivePanel.CurrentScale}, visualScale={ActivePanel.GetVisualScaleMultiplier()}");
         }
 
         public void SetLayout(MultiPageLayoutStrategy.LayoutMode mode)
